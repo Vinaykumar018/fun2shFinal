@@ -222,21 +222,24 @@ export default function ProductPopup({ productSlug }: { productSlug: string }) {
                         : content,
                   }}
                 />
-                <div
-                  className="product-rating-button"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    backgroundColor: '#f0f0f0',
-                    padding: '5px 10px',
-                    borderRadius: '20px',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                  }}
-                >
-                  <span style={{ marginRight: '5px' }}>{overallRating ?? 'N/A'}</span>
-                  <FaStar color="gold" />
-                </div>
+                {overallRating > 0 && (
+  <div
+    className="product-rating-button"
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      backgroundColor: '#f0f0f0',
+      padding: '5px 10px',
+      borderRadius: '20px',
+      cursor: 'pointer',
+      marginTop: '10px',
+    }}
+  >
+    <span style={{ marginRight: '5px' }}>{overallRating ?? 'N/A'}</span>
+    <FaStar color="gold" />
+  </div>
+)}
+
               </div>
             ) : (
               ''

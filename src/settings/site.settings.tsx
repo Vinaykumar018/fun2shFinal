@@ -93,6 +93,9 @@ export const siteSettings = {
     onSaleSettings: {
       slug: 'on-sale',
     },
+    WinterSeason: {
+      slug: 'winter-season',
+    },
   },
   accountMenu: [
     {

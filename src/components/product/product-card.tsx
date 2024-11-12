@@ -190,40 +190,43 @@ const ProductCard: FC<ProductProps> = ({
         )}
 
         {/* Dynamic Star Rating */}
-        <div
-  className="product-rating-button"
-  style={{
-    display: 'inline-flex',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    padding: '4px 8px', // Reduced padding for more compact space
-    borderRadius: '15px', // Smaller border radius for a more compact look
-    cursor: 'pointer',
-    marginTop: '10px',
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', // Subtle shadow for a cleaner look
-    transition: 'background-color 0.3s', // Smooth hover effect
-    fontSize: '0.75rem', // Further reduced font size
-  }}
-  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'} // Hover effect
-  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'} // Revert on mouse leave
->
-  {overallRating !== null ? (
-    <>
-      <span
-        className='fw-bold'
-        style={{
-          marginRight: '3px', // Reduced space between text and star
-          color: '#333', // Slightly darker color for text
-        }}
-      >
-        {overallRating.toFixed(1)}
-      </span>
-      <FaStar color="gold" size={14} /> {/* Reduced star size for compact display */}
-    </>
-  ) : (
-    <span style={{ color: '#999' }}>Loading...</span> // Optional loading state with lighter color
-  )}
-</div>
+        {overallRating > 0 && (
+  <div
+    className="product-rating-button"
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      backgroundColor: '#f0f0f0',
+      padding: '4px 8px', // Reduced padding for more compact space
+      borderRadius: '15px', // Smaller border radius for a more compact look
+      cursor: 'pointer',
+      marginTop: '10px',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', // Subtle shadow for a cleaner look
+      transition: 'background-color 0.3s', // Smooth hover effect
+      fontSize: '0.75rem', // Further reduced font size
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'} // Hover effect
+    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'} // Revert on mouse leave
+  >
+    {overallRating !== null ? (
+      <>
+        <span
+          className='fw-bold'
+          style={{
+            marginRight: '3px', // Reduced space between text and star
+            color: '#333', // Slightly darker color for text
+          }}
+        >
+          {overallRating.toFixed(1)}
+        </span>
+        <FaStar color="gold" size={14} /> {/* Reduced star size for compact display */}
+      </>
+    ) : (
+      <span style={{ color: '#999' }}>Loading...</span> // Optional loading state with lighter color
+    )}
+  </div>
+)}
+
 
 
         <div

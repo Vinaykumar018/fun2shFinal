@@ -167,6 +167,7 @@ export declare type Variation = {
   id: string;
   options?: any;
 };
+
 export declare type Product = {
   id?: number | string;
   name?: string;
@@ -203,6 +204,7 @@ export declare type Product = {
   language?: string;
   ratings?: number;
 };
+
 
 export declare type Tag = {
   id: number;

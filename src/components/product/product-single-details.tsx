@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@components/ui/button';
+import { FaPersonWalkingLuggage } from "react-icons/fa6";
 import Counter from '@components/common/counter';
 import { getVariations } from '@framework/utils/get-variations';
 import { useCart } from '@store/quick-cart/cart.context';
@@ -78,6 +79,13 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
     }
   }, [me]);
 
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Toggle function to set open/close state based on the section index
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -109,8 +117,10 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
       ),
     );
   }
+  const [viewCartBtn, setViewCartBtn] = useState(false);
 
   function addToCart() {
+    setViewCartBtn(true);
     if (!isSelected) return;
     setAddToCartLoader(true);
     setTimeout(() => {
@@ -173,7 +183,7 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
   function handleBuyToCart() {
     // if (!isSelected) return;
     // router.push('/checkout');
-    addToCart();
+  
     openCart();
   }
 
@@ -215,20 +225,20 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
 
+  {console.log(product.short_description)}
   return (
     <div className="items-start block grid-cols-9 pb-10 lg:grid gap-x-10 xl:gap-x-14 pt-7 lg:pb-14 2xl:pb-20 ">
       <div className="col-span-5 grid grid-cols-5 gap-2.5">
         {/* Thumbnails column (col-1) */}
-         {/* // style={{ minHeight: '100px' }}  */}<>
-         <div
-            className="col-span-1 flex flex-col items-start custom-scrollbar"
+        {/* // style={{ minHeight: '100px' }}  */}
+        <>
+          <div
+            className="col-span-1 flex flex-col items-start custom-scrollbar max-h-[400px] md:max-h-[500px] lg:max-h-[600px]"
             style={{
-              maxHeight: '60vh', // Max height set to 50% of the viewport height for a more responsive layout
+              // Max height set to 50% of the viewport height for a more responsive layout
               overflowY: 'auto', // Enable vertical scrolling if content overflows
             }}
-          
           >
             {(combineImages?.length > 1
               ? combineImages
@@ -243,7 +253,7 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
                 <div
                   key={index}
                   style={{
-                    minWidth: '80px',
+                  
                     minHeight: '80px',
                     maxWidth: '100px',
                     maxHeight: '100px',
@@ -329,7 +339,7 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
               onClick={handleToggleReviews}
               className="mt-4 w-full py-2 text-white rounded-md shadow-md transition duration-200 col-span-5"
             >
-              {showReviews ? 'Hide All Reviews' : 'Show All Reviews'}
+              {showReviews ? 'All Reviews' : 'All Reviews'}
             </Button>
 
             {/* Display the reviews if toggled on */}
@@ -387,9 +397,10 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
               <div
                 className="text-sm leading-6 text-body lg:text-base lg:leading-8 react-editor-description"
                 dangerouslySetInnerHTML={{
-                  __html: content,
+                  __html: product?.short_description,
                 }}
               />
+                {overallRating > 0 &&(
               <div
                 className="product-rating-button"
                 style={{
@@ -405,7 +416,7 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
                 <span style={{ marginRight: '5px' }}>{overallRating}</span>{' '}
                 {/* Display rating number */}
                 <FaStar color="gold" /> {/* Display static star icon */}
-              </div>
+              </div>)}
             </div>
           ) : (
             ''
@@ -571,7 +582,7 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
                 </span>
               </Button>
             </div>
-
+            {viewCartBtn &&(
             <div className="w-full md:w-1/2">
               <Button
                 onClick={handleBuyToCart} // Use the new function to navigate to checkout
@@ -593,16 +604,17 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
                 }
                 // loading={addToCartLoader}
               >
-                <IoBagCheckOutline className="w-5 h-5 mr-2"></IoBagCheckOutline>
+                <FaPersonWalkingLuggage className="w-5 h-5 mr-2" />
+               
 
                 <span className="py-2 3xl:px-8">
                   {product?.quantity ||
                   (!isEmpty(selectedVariation) && selectedVariation?.quantity)
-                    ? t('Buy Now')
+                    ? t('Go to Cart')
                     : t('text-out-stock')}
                 </span>
               </Button>
-            </div>
+            </div>)}
           </div>
         </div>
         <div className="py-6">
@@ -657,31 +669,96 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
                   ))}
                 </li>
               )}
-            {/* Brand */}
-            <li>
-              <span className="inline-block font-semibold text-heading ltr:pr-2 rtl:pl-2">
-                {t('text-brand-colon')}
-              </span>
-              <Link
-                href={`${ROUTES.BRAND}=${product?.type?.slug}`}
-                className="inline-block ltr:pr-1.5 rtl:pl-1.5 transition hover:underline hover:text-heading ltr:last:pr-0 rtl:last:pl-0"
-              >
-                {product?.type?.name}
-              </Link>
-            </li>
-            {/* Shop */}
-            <li>
-              <span className="inline-block font-semibold text-heading ltr:pr-2 rtl:pl-2">
-                {t('text-shop-colon')}
-              </span>
-              <Link
-                href={`${ROUTES.SHOPS}/${product?.shop?.slug}`}
-                className="inline-block ltr:pr-1.5 rtl:pl-1.5 transition hover:underline hover:text-heading ltr:last:pr-0 rtl:last:pl-0"
-              >
-                {product?.shop?.name}
-              </Link>
-            </li>
+           
           </ul>
+          <div className="accordion-container mt-2">
+            {/* Product Details Section */}
+            <div className="shadow-sm">
+              <header
+                className="cursor-pointer flex items-center justify-between transition-colors py-5 md:py-6 border-t border-gray-300"
+                onClick={() => toggleAccordion(1)} // Toggle this section
+              >
+                <h2 className="text-sm font-semibold leading-relaxed text-heading ltr:pr-2 rtl:pl-2 md:text-base lg:text-lg">
+                  Product Details
+                </h2>
+                <div className="relative flex items-center justify-center flex-shrink-0 w-4 h-4">
+                  <div className="w-full h-0.5 bg-heading rounded-sm"></div>
+                  <div
+                    className={`origin-bottom transform w-0.5 h-full bg-heading rounded-sm absolute bottom-0 transition-transform duration-500 ease-in-out ${
+                      openIndex === 1 ? 'scale-100' : 'scale-0'
+                    }`}
+                  ></div>
+                </div>
+              </header>
+              {/* Accordion Content */}
+              {openIndex === 1 && content && (
+  <div
+    className="pb-6 md:pb-7 leading-7 text-sm text-gray-600"
+    dangerouslySetInnerHTML={{
+      __html: content
+    }}
+  />
+)}
+
+             
+            </div>
+
+            {/* Shipping Information Section */}
+            <div className="shadow-sm">
+              <header
+                className="cursor-pointer flex items-center justify-between transition-colors py-5 md:py-6 border-t border-gray-300"
+                onClick={() => toggleAccordion(2)} // Toggle this section
+              >
+                <h2 className="text-sm font-semibold leading-relaxed text-heading ltr:pr-2 rtl:pl-2 md:text-base lg:text-lg">
+                  Shipping Information
+                </h2>
+                <div className="relative flex items-center justify-center flex-shrink-0 w-4 h-4">
+                  <div className="w-full h-0.5 bg-heading rounded-sm"></div>
+                  <div
+                    className={`origin-bottom transform w-0.5 h-full bg-heading rounded-sm absolute bottom-0 transition-transform duration-500 ease-in-out ${
+                      openIndex === 2 ? 'scale-100' : 'scale-0'
+                    }`}
+                  ></div>
+                </div>
+              </header>
+              {/* Accordion Content */}
+              {openIndex === 2 && (
+                <div className="pb-6 md:pb-7 leading-7 text-sm text-gray-600">
+                  We provide fast shipping services and ensure your products
+                  arrive safely. Shipping options include standard, express, and
+                  next-day delivery.
+                </div>
+              )}
+            </div>
+
+            {/* Return & Refund Policy Section */}
+            <div className="shadow-sm">
+              <header
+                className="cursor-pointer flex items-center justify-between transition-colors py-5 md:py-6 border-t border-gray-300"
+                onClick={() => toggleAccordion(3)} // Toggle this section
+              >
+                <h2 className="text-sm font-semibold leading-relaxed text-heading ltr:pr-2 rtl:pl-2 md:text-base lg:text-lg">
+                  Return & Refund Policy
+                </h2>
+                <div className="relative flex items-center justify-center flex-shrink-0 w-4 h-4">
+                  <div className="w-full h-0.5 bg-heading rounded-sm"></div>
+                  <div
+                    className={`origin-bottom transform w-0.5 h-full bg-heading rounded-sm absolute bottom-0 transition-transform duration-500 ease-in-out ${
+                      openIndex === 3 ? 'scale-100' : 'scale-0'
+                    }`}
+                  ></div>
+                </div>
+              </header>
+              {/* Accordion Content */}
+              {openIndex === 3 && (
+                <div className="pb-6 md:pb-7 leading-7 text-sm text-gray-600">
+                  Our return and refund policy is simple: if you are not
+                  satisfied with your purchase, you can return it within 30 days
+                  for a full refund.
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* New section for Secure Payment, Easy Returns & Refunds, and 100% Genuine Product */}
           <div className="flex justify-between mt-6">
@@ -724,7 +801,7 @@ const ProductSingleDetails: React.FC<Props> = ({ product }: any) => {
             onClick={handleToggleReviewForm}
             className="mt-4 w-half py-2 text-white rounded-md shadow-md transition duration-200"
           >
-            {showReviewForm ? 'Hide Review Form' : 'Add a Review'}
+            {showReviewForm ? 'Add a Review' : 'Add a Review'}
           </Button>
 
           {/* Display the review form if toggled on */}

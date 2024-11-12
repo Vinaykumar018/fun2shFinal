@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { useAtom } from "jotai";
-import { customerContactAtom } from "@store/checkout";
-import PlusIcon from "@components/icons/plus-icon";
-import { useTranslation } from "next-i18next";
-import { useUI } from "@contexts/ui.context";
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { customerContactAtom } from '@store/checkout';
+import PlusIcon from '@components/icons/plus-icon';
+import { useTranslation } from 'next-i18next';
+import { useUI } from '@contexts/ui.context';
 import PhoneInput from '@components/ui/forms/phone-input';
-import classNames from "classnames";
+import classNames from 'classnames';
 
 interface ContactProps {
   contact: string | undefined | null;
@@ -16,10 +16,17 @@ interface ContactProps {
   className?: string;
 }
 
-const ContactGrid = ({ contact, label, count, className, userId, profileId }: ContactProps) => {
+const ContactGrid = ({
+  contact,
+  label,
+  count,
+  className,
+  userId,
+  profileId,
+}: ContactProps) => {
   const [contactNumber, setContactNumber] = useAtom(customerContactAtom);
   const { openModal, setModalView, setModalData } = useUI();
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
 
   useEffect(() => {
     if (contact) {
@@ -34,8 +41,8 @@ const ContactGrid = ({ contact, label, count, className, userId, profileId }: Co
       customerId: userId,
       profileId,
       contact,
-    })
-    setModalView("ADD_OR_UPDATE_CHECKOUT_CONTACT");
+    });
+    setModalView('ADD_OR_UPDATE_CHECKOUT_CONTACT');
 
     return openModal();
   }
@@ -57,7 +64,7 @@ const ContactGrid = ({ contact, label, count, className, userId, profileId }: Co
           onClick={onAddOrChange}
         >
           <PlusIcon className="w-4 h-4 stroke-2 ltr:mr-0.5 rtl:ml-0.5 relative top-[1px]" />
-          {contactNumber ? t("text-update") : t("text-add")}
+          {contactNumber ? t('text-update') : t('text-add')}
         </button>
       </div>
 
